@@ -1,6 +1,10 @@
-version: "2"
+version: "3.7"
 
 services:
+  azure_init:
+    image: mcr.microsoft.com/azure-cli 
+    command: az login
+    init: true
   ansible_client: # docker-compose run ansible_client bash
     build: # docker build -t ansible_client:2.7.8 .
       context: .
