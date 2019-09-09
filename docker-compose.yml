@@ -1,0 +1,14 @@
+version: "2"
+
+services:
+  ansible_client: # docker-compose run ansible_client bash
+    build: # docker build -t ansible_client:2.7.8 .
+      context: .
+      dockerfile: Dockerfile
+    image: ansible_client:2.7.8
+    working_dir: /var/pb
+    volumes:
+      - ./pb:/var/pb:rw
+      - ~/.ssh/:/root/.ssh/:rw
+      - ./log/:/var/log/ansible/
+    command: ["/bin/bash"]
