@@ -3,8 +3,10 @@ version: "3.7"
 services:
   azure_init:
     image: mcr.microsoft.com/azure-cli 
-    command: az login
-    init: true
+    command: adduser azureadmin -D && su azureadmin && az login && bash
+    volumes: 
+      - ./.ssh:/home/azureadmin/.ssh:rw
+      - ./.azure:/home/azureadmin/.azure:rw
   ansible_client: # docker-compose run ansible_client bash
     build: # docker build -t ansible_client:2.7.8 .
       context: .
@@ -13,6 +15,12 @@ services:
     working_dir: /var/pb
     volumes:
       - ./pb:/var/pb:rw
-      - ~/.ssh/:/root/.ssh/:rw
-      - ./log/:/var/log/ansible/
+      - ./.ssh/:/root/.ssh/:rw
+      - ./.log/:/var/log/ansible/
+      - ./.azure:/root/.azure:rw
     command: ["/bin/bash"]
+    depends_on: 
+      - azure_init
+
+volumes:
+  azure:

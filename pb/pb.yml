@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  tasks:
+  - raw: touch /test.txt
+  - name: Create a resource group
+    azure_rm_resourcegroup:
+      name: rs
+      location: eastus
+  - name: Create VM with defaults
+    azure_rm_virtualmachine:
+      resource_group: rs
+      name: os_1
+      open_ports: 80
+      restarted: yes
+      image:
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.1'
+        version: latest
